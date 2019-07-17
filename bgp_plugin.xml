@@ -1,0 +1,7 @@
+<library path="lib/libpy_global_planner">
+  <class name="py_global_planner/PyGlobalPlanner" type="py_global_planner::PyGlobalPlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      A global planner that uses an embedded Python interpreter to call an external script for quick prototyping
+    </description>
+  </class>
+</library>
