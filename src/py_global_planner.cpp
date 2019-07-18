@@ -1,6 +1,8 @@
 #include <rospynav/py_global_planner.h>
 #include <pluginlib/class_list_macros.h>
 
+#include <python2.7/Python.h>
+
 //register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_EXPORT_CLASS(py_global_planner::PyGlobalPlanner, nav_core::BaseGlobalPlanner)
 
@@ -14,9 +16,16 @@ namespace py_global_planner {
     initialize(name, costmap_ros);
   }
   
+  PyGlobalPlanner::~PyGlobalPlanner() {
+      if (initialized_) {
+          Py_Finalize();
+      }
+  }
+  
   void PyGlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
     ROS_INFO("Called PyGlobalPlanner::initialize"); 
     if(!initialized_){
+      // ROS init
       costmap_ros_ = costmap_ros;
       costmap_ = costmap_ros_->getCostmap();
 
@@ -24,6 +33,14 @@ namespace py_global_planner {
       private_nh.param("step_size", step_size_, costmap_->getResolution());
       private_nh.param("min_dist_from_robot", min_dist_from_robot_, 0.10);
       world_model_ = new base_local_planner::CostmapModel(*costmap_); 
+
+      private_nh.param<std::string> ("planner_file", planner_file_, "py_global_planner.py");
+      ROS_INFO("Planner file is %s", planner_file_.c_str()); 
+      // Python init
+      Py_Initialize();
+      PyRun_SimpleString("from time import time,ctime\nimport os, sys\n"
+                       "print('Python 2.7 says today is', ctime(time()))\n"
+                       "print(os.getcwd(), sys.path)\n");
 
       initialized_ = true;
     }

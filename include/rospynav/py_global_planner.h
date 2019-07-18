@@ -32,8 +32,13 @@ namespace py_global_planner {
        */
       PyGlobalPlanner(std::string name, costmap_2d::Costmap2DROS* costmap_ros);
 
+     /**
+      * @brief  Default destructor for the PyGlobalPlanner object
+      */
+     ~PyGlobalPlanner();
+     
       /**
-       * @brief  Initialization function for the CarrotPlanner
+       * @brief  Initialization function for the PyGlobalPlanner
        * @param  name The name of this planner
        * @param  costmap_ros A pointer to the ROS wrapper of the costmap to use for planning
        */
@@ -54,6 +59,9 @@ namespace py_global_planner {
       double step_size_, min_dist_from_robot_;
       costmap_2d::Costmap2D* costmap_;
       base_local_planner::WorldModel* world_model_; ///< @brief The world model that the controller will use
+      
+      // Python module parameters
+      std::string planner_file_;
 
       /**
        * @brief  Checks the legality of the robot footprint at a position and orientation using the world model

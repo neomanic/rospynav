@@ -44,7 +44,6 @@
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>pluginlib</build_export_depend>
-  <build_export_depend>pluginlib</build_export_depend>
   <build_export_depend>costmap_2d</build_export_depend>
   <build_export_depend>base_local_planner</build_export_depend>
   <build_export_depend>nav_core</build_export_depend>
@@ -53,7 +52,6 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>pluginlib</exec_depend>
   <exec_depend>pluginlib</exec_depend>
   <exec_depend>costmap_2d</exec_depend>
   <exec_depend>base_local_planner</exec_depend>

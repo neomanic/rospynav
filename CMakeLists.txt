@@ -20,6 +20,8 @@ find_package(catkin REQUIRED COMPONENTS
   pluginlib
 )
 
+find_package (PythonLibs 2.7 EXACT)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -154,6 +156,7 @@ add_dependencies(py_global_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_
 ## Specify libraries to link a library or executable target against
 target_link_libraries(py_global_planner
   ${catkin_LIBRARIES}
+  ${PYTHON_LIBRARIES}
 )
 
 #############
