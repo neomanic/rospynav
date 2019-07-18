@@ -1,5 +1,14 @@
 
 
+In navigation launch file,
+
+    <param name="PyGlobalPlanner/planner_path" value="$(find rospynav)/src" />
+    <param name="PyGlobalPlanner/planner_module" value="py_global_planner.py" />
+
+In parameters:
+    base_global_planner: py_global_planner/PyGlobalPlanner #global_planner/GlobalPlanner # default is navfn/NavfnROS
+    
+
 
 
 References:

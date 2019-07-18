@@ -60,9 +60,6 @@ namespace py_global_planner {
       costmap_2d::Costmap2D* costmap_;
       base_local_planner::WorldModel* world_model_; ///< @brief The world model that the controller will use
       
-      // Python module parameters
-      std::string planner_file_;
-
       /**
        * @brief  Checks the legality of the robot footprint at a position and orientation using the world model
        * @param x_i The x position of the robot 

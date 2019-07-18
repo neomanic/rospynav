@@ -23,7 +23,7 @@ namespace py_global_planner {
   }
   
   void PyGlobalPlanner::initialize(std::string name, costmap_2d::Costmap2DROS* costmap_ros){
-    ROS_INFO("Called PyGlobalPlanner::initialize"); 
+    ROS_DEBUG("Called PyGlobalPlanner::initialize"); 
     if(!initialized_){
       // ROS init
       costmap_ros_ = costmap_ros;
@@ -34,14 +34,29 @@ namespace py_global_planner {
       private_nh.param("min_dist_from_robot", min_dist_from_robot_, 0.10);
       world_model_ = new base_local_planner::CostmapModel(*costmap_); 
 
-      private_nh.param<std::string> ("planner_file", planner_file_, "py_global_planner.py");
-      ROS_INFO("Planner file is %s", planner_file_.c_str()); 
+      std::string planner_path;
+      std::string planner_module;
+      
+      private_nh.param<std::string> ("planner_path", planner_path, "");
+      private_nh.param<std::string> ("planner_module", planner_module, "rospynav");
+      ROS_INFO("Planner file is %s", planner_module.c_str()); 
       // Python init
       Py_Initialize();
+      // TODO: add planner_path to python sys.path
+
       PyRun_SimpleString("from time import time,ctime\nimport os, sys\n"
                        "print('Python 2.7 says today is', ctime(time()))\n"
                        "print(os.getcwd(), sys.path)\n");
-
+      
+      PyObject *pName = PyString_FromString(planner_module.c_str());
+      PyObject *pModule = PyImport_Import(pName);
+      Py_DECREF(pName);
+      
+      if (pModule == NULL) {
+          ROS_ERROR("Error importing module from %s", planner_module.c_str());
+          return;
+      }
+      
       initialized_ = true;
     }
     else
