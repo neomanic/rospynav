@@ -33,21 +33,27 @@ namespace py_global_planner {
       private_nh.param("step_size", step_size_, costmap_->getResolution());
       private_nh.param("min_dist_from_robot", min_dist_from_robot_, 0.10);
       world_model_ = new base_local_planner::CostmapModel(*costmap_); 
-
+      
+      // Python embed and planner module import
       std::string planner_path;
       std::string planner_module;
       
+      // when adding a custom external planner, add the path to it as well
       private_nh.param<std::string> ("planner_path", planner_path, "");
       private_nh.param<std::string> ("planner_module", planner_module, "rospynav");
       ROS_INFO("Planner file is %s", planner_module.c_str()); 
-      // Python init
-      Py_Initialize();
-      // TODO: add planner_path to python sys.path
 
-      PyRun_SimpleString("from time import time,ctime\nimport os, sys\n"
-                       "print('Python 2.7 says today is', ctime(time()))\n"
-                       "print(os.getcwd(), sys.path)\n");
+      Py_Initialize();
       
+      // add planner_path to Python sys.path
+      if (planner_path.length() > 0) {
+          PyObject* sysPath = PySys_GetObject((char*)"path");
+          PyObject* programName = PyString_FromString(planner_path.c_str());
+          PyList_Append(sysPath, programName);
+          Py_DECREF(programName);
+      }
+      
+      // import planning module
       PyObject *pName = PyString_FromString(planner_module.c_str());
       PyObject *pModule = PyImport_Import(pName);
       Py_DECREF(pName);
